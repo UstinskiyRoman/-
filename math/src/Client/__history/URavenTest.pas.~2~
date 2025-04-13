@@ -1,0 +1,68 @@
+unit URavenTest;
+
+interface
+
+uses
+  WinApi.Windows, WinApi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.StdCtrls, Vcl.OleCtrls, Vcl.ComCtrls, Vcl.CheckLst,
+  Vcl.ExtCtrls, Vcl.Buttons,WinApi.ShellApi, Vcl.Menus, // MSHTML, jsWebBrowser,
+  UTimerForTrainer, UCourse, Generics.Collections, UModes, UStatistic,
+  UFormBase, UTools, UConfigClient, //UExtendReasoning,  UTaskMetaInfo,
+  UTaskInfo, UTypeTasks, WinApi.MMSystem, System.ImageList,
+  Vcl.ImgList, UCustomMessageBox, SHDocVw, UMainMenu, //UReasoning,
+  System.IOUtils,
+  UTaskResourcesManager, UDataModuleBase, Data.DB, Data.Win.ADODB;
+type
+  TTimerMode = (Ena, Dis);
+
+type
+    TFRavenTest = class(TFormBase)
+    PanelWB: TPanel;
+    Label1: TLabel;
+    btnHelp: TBitBtn;
+    btnPauseTest: TBitBtn;
+    btnNext: TBitBtn;
+    btnExit: TBitBtn;
+    TimerAnimationRunPause: TTimer;
+
+    Image1: TImage;
+    Image2: TImage;
+    Image3: TImage;
+    Image4: TImage;
+    Image5: TImage;
+    Image6: TImage;
+    Image7: TImage;
+    Image8: TImage;
+    questionImage: TImage;
+    StatusBar1: TStatusBar;
+    StatusBarUserInfo: TStatusBar;
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FRavenTest: TFRavenTest;
+  IsFinishedTest: Boolean;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFRavenTest.FormCreate(Sender: TObject);
+begin
+
+//  frmExtReasoning := TFExtendReasoning.Create(Self);
+//  frmExtReasoning.Parent := panelBackground;
+//  frmExtReasoning.Align := alClient;
+//  frmExtReasoning.Visible := false;
+//  frmExtReasoning.btnClose.OnClick := Self.OnCloseExtendReasoning;
+  TimeTrainer := TTimerShare.Create;
+  IsFinishedTest:=false;
+  StatusBarUserInfo.Panels[0].Text:=FMainMenu.UserInfo.ToString();
+end;
+
+end.

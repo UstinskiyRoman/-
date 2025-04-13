@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.809,D:\Мусор\SIRS_Mathematics_For_All.Percentage-master\math\src\Client\URavenClass.pas=D:\Мусор\SIRS_Mathematics_For_All.Percentage-master\math\src\Client\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.474,D:\Мусор\SIRS_Mathematics_For_All.Percentage-master\math\src\Client\Unit1.dfm=D:\Мусор\SIRS_Mathematics_For_All.Percentage-master\math\src\Client\URavenTest.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.911,D:\Мусор\SIRS_Mathematics_For_All.Percentage-master\math\src\Client\Unit1.dfm=D:\Мусор\SIRS_Mathematics_For_All.Percentage-master\math\src\Client\UShowStat.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.809,D:\Мусор\SIRS_Mathematics_For_All.Percentage-master\math\src\Client\URavenClass.dfm=D:\Мусор\SIRS_Mathematics_For_All.Percentage-master\math\src\Client\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.343,=D:\Мусор\SIRS_Mathematics_For_All.Percentage-master\math\src\Client\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.911,D:\Мусор\SIRS_Mathematics_For_All.Percentage-master\math\src\Client\Unit1.pas=D:\Мусор\SIRS_Mathematics_For_All.Percentage-master\math\src\Client\UShowStat.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.606,=D:\Мусор\SIRS_Mathematics_For_All.Percentage-master\math\src\Client\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.474,D:\Мусор\SIRS_Mathematics_For_All.Percentage-master\math\src\Client\Unit1.pas=D:\Мусор\SIRS_Mathematics_For_All.Percentage-master\math\src\Client\URavenTest.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.959,=D:\Мусор\SIRS_Mathematics_For_All.Percentage-master\math\src\Client\Unit1.pas</Transaction>
+  </Transactions>
+</BorlandProject>

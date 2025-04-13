@@ -1,0 +1,18 @@
+object DataModuleBase: TDataModuleBase
+  Height = 188
+  Width = 533
+  PixelsPerInch = 120
+  object ADOConnectionBase: TADOConnection
+    ConnectionString = 'Data Source=..\data\LogicDB.mdb'
+    LoginPrompt = False
+    Provider = 'Microsoft.Jet.OLEDB.4.0'
+    Left = 60
+    Top = 20
+  end
+  object ADOQueryBase: TADOQuery
+    Connection = ADOConnectionBase
+    Parameters = <>
+    Left = 180
+    Top = 20
+  end
+end

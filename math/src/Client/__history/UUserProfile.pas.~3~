@@ -1,0 +1,163 @@
+unit UUserProfile;
+interface
+uses
+  WinApi.Windows, WinApi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.StdCtrls, Vcl.Grids, Vcl.DBGrids, Data.DB, Data.Win.ADODB, Vcl.ExtCtrls,
+  UDataModuleClient, UFormBase, Vcl.ComCtrls, UUserInfo, UCustomMessageBox;
+type
+  TFUserProfile = class(TFormBase)
+    Button1: TButton;
+    Button2: TButton;
+    Button5: TButton;
+    DataSource1: TDataSource;
+    GroupBox1: TGroupBox;
+    DBGrid1: TDBGrid;
+    Label4: TLabel;
+    DBGrid2: TDBGrid;
+    Label5: TLabel;
+    DataSource2: TDataSource;
+    StatusBarUserInfo: TStatusBar;
+    grpBoxSettings: TGroupBox;
+    Label3: TLabel;
+    Edit1: TEdit;
+    Button3: TButton;
+    procedure Button3Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure GridAlign(DbgridAlign: TDbgrid);
+    procedure Button1Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormShow(Sender: TObject);
+  protected
+    procedure ExecuteClose(); override;
+  private
+    CONST
+      TEMPLATE_PASSWORD = '*****';
+  public
+    procedure LoadUserInfo(user: TUserInfo);
+  end;
+var
+  FUserProfile: TFUserProfile;
+
+implementation
+uses UMainMenu, UModeTestMenu, URavenClass;
+{$R *.dfm}
+procedure TFUserProfile.ExecuteClose();
+begin
+  Button5.Click;
+end;
+procedure TFUserProfile.LoadUserInfo(user: TUserInfo);
+begin
+  StatusBarUserInfo.Panels[0].Text:=user.ToString(True);
+end;
+procedure TFUserProfile.GridAlign(DbgridAlign: TDbgrid);
+Var i,j: integer;//счетчики для цикла
+    ifild,jrows: integer; //сюда запишем количество строк и столбцов полученного запроса
+twidth,maxwidth: integer;//длина текста и максимальная длина текста
+          fname: string; //сюда будем записывать имя колонки
+begin
+ ifild:=DbgridAlign.FieldCount-1;//столбцы
+ jrows:=DbgridAlign.DataSource.DataSet.RecordCount-1;//строки
+ for i:=0 to ifild do //открываем цикл по колонкам
+   begin
+    maxwidth:=0;//обнуляем максимальное значение
+    fname:=DbgridAlign.Columns.Items[i].FieldName; //запоминаем имя колонки
+    twidth:=length(trim(DbgridAlign.DataSource.DataSet.FieldByName(fname).AsString));//считаем длину
+    DbgridAlign.DataSource.DataSet.First;
+    for j:=0 to jrows  do //открываем цикл по строкам
+     begin
+      twidth:=length(trim(DbgridAlign.DataSource.DataSet.FieldByName(fname).AsString));//считаем длину
+      If maxwidth<twidth then maxwidth:=twidth;//сравниваем с максимальной и перезаписываем по надобности
+      DbgridAlign.DataSource.DataSet.Next;
+     end;
+    DbgridAlign.Columns.Items[i].Width:=maxwidth*DbgridAlign.Font.Size+DbgridAlign.Font.Size;//меняем ширину столбца на полученный максимум+одну букву
+   end;
+end;
+procedure TFUserProfile.Button3Click(Sender: TObject);
+begin
+  if(edit1.Text = EmptyStr)then
+  begin
+    FCustomMessageBox.SetMessage('Ошибка', 'Введите пароль!', TTypeMessage.msgOK);
+    Exit;
+  end;
+  if(Edit1.Text = TEMPLATE_PASSWORD)then
+  begin
+    FCustomMessageBox.SetMessage('Ошибка', 'Введите новый пароль!', TTypeMessage.msgOK);
+    Exit;
+  end;
+  if(FCustomMessageBox.SetMessage('Внимание', 'Хотите изменить пароль?', TTypeMessage.msgOKCancel) = mrOk)then
+  begin
+    DataModuleClient.SetPasswordUser(FMainMenu.UserInfo.ID, Edit1.Text);
+  end;
+end;
+procedure TFUserProfile.Button2Click(Sender: TObject);
+begin
+  Hide();
+  HardLvl1:=2;
+  FRavenClass:=TRavenClass.Create(nil);
+  FRavenClass.Show();
+end;
+procedure TFUserProfile.Button5Click(Sender: TObject);
+begin
+  if(FCustomMessageBox.SetMessage('Внимание', 'Вы действительно хотите выйти из профиля?', TTypeMessage.msgOKCancel) = mrOk)then
+  begin
+//    FMainMenu.editPassword.Text:=EmptyStr;
+//    FMainMenu.comboboxClassGroup.Items.Clear;
+//    FMainMenu.comboboxFIO.Items.Clear;
+    FMainMenu.Show;
+    Close;
+  end;
+end;
+procedure TFUserProfile.Button1Click(Sender: TObject);
+begin
+//  if(GroupBox1.Visible = False)then
+//  begin
+//    with DataModuleClient.ADOQueryGlobal do
+//    begin
+//      Close;
+//      SQL.Clear;
+//      SQL.Text:='SELECT stat.n_zadanie AS [Номер задания], stat.time AS [Время], stat.sloj_kyrsa AS [Сложность курса],'+
+//                ' stat.type_zadanie AS [Тип задания], stat.result AS [Подсказки] FROM stat WHERE id_user=:userID';
+//      Parameters.ParamByName('userID').Value:=FMainMenu.UserInfo.ID;
+//      Open;
+//    end;
+//
+//    DBGrid1.Columns[0].Width:=90;
+//    DBGrid1.Columns[1].Width:=50;
+//    DBGrid1.Columns[2].Width:=150;
+//    DBGrid1.Columns[3].Width:=80;
+//
+//    with DataModuleClient.ADOQuerySecond do
+//    begin
+//      Close;
+//      SQL.Clear;
+//      SQL.Text:='SELECT A.nameLesson AS [Урок], kyrs.nazv_kyrsa AS [Сложность], A.mark AS [Оценка], A.effect AS [Эффективность, %], A.dateTest AS [Дата] FROM kyrs INNER JOIN '+
+//                '(SELECT yroks.nazv_yroka AS nameLesson, yroks.nazv_kyrs AS idKyrs, StatisticUser.Ball AS mark,'+
+//                'StatisticUser.Effect AS effect, StatisticUser.DateTest AS dateTest FROM StatisticUser '+
+//                'INNER JOIN yroks ON StatisticUser.LessonId=yroks.id WHERE StatisticUser.UserId=:idUser) as A ON kyrs.id=A.idKyrs';
+//      Parameters.ParamByName('idUser').Value:=FMainMenu.UserInfo.ID;
+//      Open;
+//    end;
+//
+//    DBGrid2.Columns[0].Width:=80;
+//    DBGrid2.Columns[1].Width:=200;
+//    DBGrid2.Columns[2].Width:=65;
+//    DBGrid2.Columns[3].Width:=118;
+//
+//    GroupBox1.Visible:=true;
+//  end else
+//  begin
+//    GroupBox1.Visible:=false;
+//  end;
+end;
+procedure TFUserProfile.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  action:=caFree;
+  FUserProfile:=nil;
+end;
+procedure TFUserProfile.FormShow(Sender: TObject);
+begin
+  Edit1.Text:=TEMPLATE_PASSWORD;
+end;
+end.

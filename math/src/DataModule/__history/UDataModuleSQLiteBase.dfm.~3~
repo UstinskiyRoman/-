@@ -1,0 +1,42 @@
+object DataModuleSQLiteBase: TDataModuleSQLiteBase
+  Height = 251
+  Width = 474
+  PixelsPerInch = 120
+  object FDConnectionBase: TFDConnection
+    Params.Strings = (
+      'Encrypt=aes-256'
+      'Password=12345Z'
+      'Database=..\..\..\..\data\LogicDBResources.db'
+      'CacheSize=1000000000000'
+      'DriverID=SQLite3')
+    Left = 230
+    Top = 30
+  end
+  object FDQueryBase: TFDQuery
+    Connection = FDConnectionBase
+    Left = 380
+    Top = 30
+  end
+  object FDPhysSQLiteDriverLinkBase: TFDPhysSQLiteDriverLink
+    Left = 80
+    Top = 30
+  end
+  object FDSQLiteValidateBase: TFDSQLiteValidate
+    DriverLink = FDPhysSQLiteDriverLinkBase
+    Left = 80
+    Top = 150
+  end
+  object FDGUIxWaitCursor1: TFDGUIxWaitCursor
+    Provider = 'Forms'
+    ScreenCursor = gcrAppWait
+    Left = 230
+    Top = 150
+  end
+  object FDSQLiteSecurity1: TFDSQLiteSecurity
+    DriverLink = FDPhysSQLiteDriverLinkBase
+    Password = '12345Z'
+    Options = [soSetLargeCache]
+    Left = 380
+    Top = 150
+  end
+end

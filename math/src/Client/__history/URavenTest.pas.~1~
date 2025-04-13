@@ -1,0 +1,53 @@
+unit URavenTest;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Buttons,
+  System.ImageList, Vcl.ImgList;
+
+type
+  TForm1 = class(TForm)
+    PanelWB: TPanel;
+    Label1: TLabel;
+    btnHelp: TBitBtn;
+    btnPauseTest: TBitBtn;
+    btnNext: TBitBtn;
+    btnExit: TBitBtn;
+    TimerAnimationSolution: TTimer;
+    TimerAnimationRunPause: TTimer;
+
+    Image1: TImage;
+    Image2: TImage;
+    Image3: TImage;
+    Image4: TImage;
+    Image5: TImage;
+    Image6: TImage;
+    Image7: TImage;
+    Image8: TImage;
+    questionImage: TImage;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFTester.TimerAnimationSolutionTimer(Sender: TObject);
+begin
+  if not btnSolutionTask.Glyph.Empty then
+    btnSolutionTask.Glyph.Assign(nil)
+  else ImageList1.GetBitmap(2, btnSolutionTask.Glyph);
+  if not btnVideoSolutionTask.Glyph.Empty then
+    btnVideoSolutionTask.Glyph.Assign(nil)
+  else ImageList1.GetBitmap(3, btnVideoSolutionTask.Glyph);
+end;
+
+end.

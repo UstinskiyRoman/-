@@ -1,0 +1,17 @@
+object DataModuleBase: TDataModuleBase
+  OldCreateOrder = False
+  Height = 150
+  Width = 426
+  object ADOConnectionBase: TADOConnection
+    LoginPrompt = False
+    Provider = 'Microsoft.Jet.OLEDB.4.0'
+    Left = 48
+    Top = 16
+  end
+  object ADOQueryBase: TADOQuery
+    Connection = ADOConnectionBase
+    Parameters = <>
+    Left = 144
+    Top = 16
+  end
+end

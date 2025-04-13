@@ -1,0 +1,278 @@
+unit UDataModuleBase;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, Data.DB, Data.Win.ADODB, Generics.Collections,
+  //UDifficulty,
+   UCourse, ULessonInfo;
+
+type
+  TDataModuleBase = class(TDataModule)
+    ADOConnectionBase: TADOConnection;
+    ADOQueryBase: TADOQuery;
+  private
+    { Private declarations }
+  public
+    HasErrors: boolean;
+
+    procedure Init(pathToDatabase: string);
+
+    function GetSortedCoursesWithSortedLessons(): TObjectList<TCourse>;
+    function GetCourses(): TObjectList<TCourse>; overload;
+    function GetCourses(diff:Integer): TObjectList<TCourse>; overload;
+    function GetCourse(id: integer): TCourse;
+    function GetLessons(): TObjectList<TLesson>; overload;
+    function GetLesson(id: integer):TLesson;
+    function GetLessons(courseId: integer): TObjectList<TLesson>; overload;
+    function GetLessons(diff,courseId: integer): TObjectList<TLesson>; overload;
+  end;
+
+CONST
+  PASSWORD_TO_DB = '1';
+
+var
+  DataModuleBase: TDataModuleBase;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+procedure TDataModuleBase.Init(pathToDatabase: string);
+begin
+  try
+    ADOConnectionBase.Connected := False;
+    ADOConnectionBase.ConnectionString :=
+        'Provider=Microsoft.Jet.OLEDB.4.0;'+
+        'User ID=Admin;'+
+        'Data Source='+pathToDatabase+';'+
+        'Mode=Share Deny None;'+
+        'Extended Properties="";'+
+        'Jet OLEDB:System database="";'+
+        'Jet OLEDB:Registry Path="";'+
+        'Jet OLEDB:Database Password="'+PASSWORD_TO_DB+'";'+
+        'Jet OLEDB:Engine Type=5;'+
+        'Jet OLEDB:Database Locking Mode=1;'+
+        'Jet OLEDB:Global Partial Bulk Ops=2;'+
+        'Jet OLEDB:Global Bulk Transactions=1;'+
+        'Jet OLEDB:New Database Password="'+PASSWORD_TO_DB+'";'+
+        'Jet OLEDB:Create System Database=False;'+
+        'Jet OLEDB:Encrypt Database=False;'+
+        'Jet OLEDB:Don'+'''t Copy Locale on Compact=False;'+
+        'Jet OLEDB:Compact Without Replica Repair=False;'+
+        'Jet OLEDB:SFP=False';
+
+    ADOConnectionBase.Connected := true;
+  except on E : Exception do
+    begin
+      HasErrors := true;
+      raise Exception.Create(Format('Ошибка. Нет соединения с Базой Данных. %s', [E.Message]));
+    end;
+  end;
+end;
+
+function ContainsItem(courses: TObjectList<TCourse>; courseId: integer):boolean;
+var
+  course: TCourse;
+begin
+  Result := false;
+  for course in courses do
+  begin
+    if course.ID = courseId then
+    begin
+      Result := true;
+      break;
+    end;
+  end;
+end;
+
+function TDataModuleBase.GetSortedCoursesWithSortedLessons(): TObjectList<TCourse>;
+begin
+  Result := TObjectList<TCourse>.Create;
+
+  with ADOQueryBase do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Text:='SELECT Courses.Id, NameCourse, Courses.Description, Difficulty, Lessons.CourseID, Lessons.Id, Lessons.LessonName, Lessons.Description, Lessons.OrderNumber, Lessons.cl_num, Lessons.theory FROM Courses'
+     +' INNER JOIN Lessons ON Courses.Id = Lessons.CourseID ORDER BY Courses.Difficulty,Lessons.cl_num ASC';
+    Open;
+    First;
+    while not(Eof) do
+    begin                                                                                                                                          //TDifficulty(Fields[3].AsInteger)
+      if not ContainsItem(Result, Fields[0].AsInteger) then Result.Add(TCourse.Create(Fields[0].AsInteger, Fields[1].AsString, Fields[2].AsString, Fields[3].AsInteger));
+
+      for var course in Result do
+      begin
+        // check the course ID with course ID from lessons
+        if course.ID = Fields[4].AsInteger then
+        begin
+          course.Lessons.Add(TLesson.Create(Fields[5].AsInteger, Fields[6].AsString, Fields[7].AsString, course.ID, Fields[8].AsInteger,Fields[9].AsInteger,Fields[10].AsString));
+        end;
+      end;
+
+      Next;
+    end;
+  end;
+
+  ADOQueryBase.Close;
+  ADOQueryBase.Active:=False;
+end;
+
+function TDataModuleBase.GetCourse(id: integer): TCourse;
+begin
+  with ADOQueryBase do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Text:='SELECT Id,NameCourse,Description,Difficulty FROM Courses WHERE Id=:id';
+    Parameters.ParamByName('id').Value := id;
+    Open;
+    Result := TCourse.Create(Fields[0].AsInteger, Fields[1].AsString, Fields[2].AsString, Fields[3].AsInteger);
+  end;
+
+  ADOQueryBase.Close;
+  ADOQueryBase.Active:=False;
+end;
+//
+function TDataModuleBase.GetCourses(): TObjectList<TCourse>;
+begin
+  Result:=TObjectList<TCourse>.Create;
+
+  with ADOQueryBase do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Text:='SELECT Id,NameCourse,Description,Difficulty FROM Courses';
+    Open;
+    First;
+    while not(Eof) do
+    begin
+      Result.Add(TCourse.Create(Fields[0].AsInteger, Fields[1].AsString, Fields[2].AsString, Fields[3].AsInteger));
+      Next;
+    end;
+  end;
+
+  ADOQueryBase.Close;
+  ADOQueryBase.Active:=False;
+end;
+
+
+function TDataModuleBase.GetCourses(diff:Integer): TObjectList<TCourse>;
+begin
+  Result:=TObjectList<TCourse>.Create;
+
+  with ADOQueryBase do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Text:='SELECT Id,NameCourse,Description,Difficulty FROM Courses WHERE Difficulty<=:dfc';
+    Parameters.ParamByName('dfc').Value := diff;
+    Open;
+    First;
+    while not(Eof) do
+    begin
+      Result.Add(TCourse.Create(Fields[0].AsInteger, Fields[1].AsString, Fields[2].AsString, Fields[3].AsInteger));
+      Next;
+    end;
+  end;
+
+  ADOQueryBase.Close;
+  ADOQueryBase.Active:=False;
+end;
+
+
+
+//
+function TDataModuleBase.GetLessons(): TObjectList<TLesson>;
+begin
+  Result:=TObjectList<TLesson>.Create;
+
+  with ADOQueryBase do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Text:='SELECT Id,LessonName,Description,CourseID,OrderNumber,cl_num, theory FROM Lessons ORDER BY courseid,cl_num,OrderNumber ASC';
+    Open;
+    First;
+    while not(Eof) do
+    begin
+      Result.Add(TLesson.Create(Fields[0].AsInteger, Fields[1].AsString, Fields[2].AsString, Fields[3].AsInteger, Fields[4].AsInteger, Fields[5].AsInteger, Fields[6].AsString));
+      Next;
+    end;
+  end;
+
+  ADOQueryBase.Close;
+  ADOQueryBase.Active:=False;
+end;
+//
+function TDataModuleBase.GetLessons(courseId: integer): TObjectList<TLesson>;
+begin
+  Result:=TObjectList<TLesson>.Create;
+
+  with ADOQueryBase do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Text:='SELECT Id, LessonName, Description, CourseID, OrderNumber,cl_num, theory FROM Lessons WHERE CourseID=:courseId ORDER BY cl_num,OrderNumber ASC';
+    Parameters.ParamByName('courseId').Value := courseId;
+    Open;
+    First;
+    while not(Eof) do
+    begin
+      Result.Add(TLesson.Create(Fields[0].AsInteger, Fields[1].AsString, Fields[2].AsString, Fields[3].AsInteger, Fields[4].AsInteger, Fields[5].AsInteger, Fields[6].AsString));
+      Next;
+    end;
+  end;
+
+  ADOQueryBase.Close;
+  ADOQueryBase.Active:=False;
+end;
+
+function TDataModuleBase.GetLessons(diff,courseId: integer): TObjectList<TLesson>;
+begin
+  Result:=TObjectList<TLesson>.Create;
+
+  with ADOQueryBase do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Text:='SELECT Id, LessonName, Description, CourseID, OrderNumber,cl_num, theory FROM Lessons WHERE CourseID=:courseId and cl_num=:diff ORDER BY OrderNumber ASC';
+    Parameters.ParamByName('courseId').Value := courseId;
+    Parameters.ParamByName('diff').Value := diff;
+    Open;
+    First;
+    while not(Eof) do
+    begin
+      Result.Add(TLesson.Create(Fields[0].AsInteger, Fields[1].AsString, Fields[2].AsString, Fields[3].AsInteger, Fields[4].AsInteger, Fields[5].AsInteger, Fields[6].AsString));
+      Next;
+    end;
+  end;
+
+  ADOQueryBase.Close;
+  ADOQueryBase.Active:=False;
+end;
+
+
+
+//
+function TDataModuleBase.GetLesson(id: integer):TLesson;
+begin
+  with ADOQueryBase do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Text := 'SELECT Id, LessonName, Description, CourseID, OrderNumber, cl_num, theory FROM Lessons WHERE Id=:lessonId';
+    Parameters.ParamByName('lessonId').Value := id;
+    Open;
+
+    Result := TLesson.Create(Fields[0].AsInteger, Fields[1].AsString, Fields[2].AsString, Fields[3].AsInteger, Fields[4].AsInteger, Fields[5].AsInteger, Fields[6].AsString);
+  end;
+
+  ADOQueryBase.Close;
+  ADOQueryBase.Active:=False;
+end;
+
+end.

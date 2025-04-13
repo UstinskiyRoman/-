@@ -1,0 +1,29 @@
+unit UShowStat;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, VclTee.TeeGDIPlus, Data.DB,
+  VCLTee.TeEngine, Vcl.ExtCtrls, VCLTee.TeeProcs, VCLTee.Chart, VCLTee.DBChart,
+  Data.Win.ADODB;
+
+type
+  TShowStats = class(TForm)
+    ADOTable1: TADOTable;
+    ADOConnection1: TADOConnection;
+    DBChart1: TDBChart;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ShowStats: TShowStats;
+
+implementation
+
+{$R *.dfm}
+
+end.
