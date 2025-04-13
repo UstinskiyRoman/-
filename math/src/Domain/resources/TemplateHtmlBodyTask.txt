@@ -1,0 +1,24 @@
+<center><table id="Table" border=2 bordercolor="#108404" bgcolor="#FFFFCC">
+<tr><td rowspan="2" align="center"><font size="5" face="Verdana"><span style="padding:1ep;">ярнкаеж_дкъ_ярпнй</span></font></td>
+<td colspan="3" align="center"><font size="6" face="Verdana">ярнкаеж_дкъ_цпсоош_ярнкажнб</font></td>
+</tr>
+<tr><td style="background-color:#FFFFFF"><img src='<image.extension>' width='125ep' height='115ep'></td>
+<td style="background-color:#FFFFFF"><img src='<image.extension>' width='125ep' height='115ep'></td>
+<td style="background-color:#FFFFFF"><img src='<image.extension>' width='125ep' height='115ep'></td>
+</tr>
+<tr><td style="background-color:#00AA00"><img src='<image.extension>' width='135ep' height='130ep'></td>
+<td align="center" bgcolor="#C0C0C0"><input id="pos1t" type="checkbox" name="checkbox" class = "checkbox" onclick="cellClick(this, 2)"></td>
+<td align="center" bgcolor="#C0C0C0"><input id="pos2t" type="checkbox" name="checkbox" class = "checkbox" onclick="cellClick(this, 2)"></td>
+<td align="center" bgcolor="#C0C0C0"><input id="pos3t" type="checkbox" name="checkbox" class = "checkbox" onclick="cellClick(this, 2)"></td>
+</tr>
+<tr><td style="background-color:#FF0000"><img src='<image.extension>' width='135ep' height='130ep'></td>
+<td align="center" bgcolor="#C0C0C0"><input id="pos4t" type="checkbox" name="checkbox" class = "checkbox" onclick="cellClick(this, 3)"></td>
+<td align="center" bgcolor="#C0C0C0"><input id="pos5t" type="checkbox" name="checkbox" class = "checkbox" onclick="cellClick(this, 3)"></td>
+<td align="center" bgcolor="#C0C0C0"><input id="pos6t" type="checkbox" name="checkbox" class = "checkbox" onclick="cellClick(this, 3)"></td>
+</tr>
+<tr><td style="background-color:#10A0CA"><img src='<image.extension>' width='135ep' height='130ep'></td>
+<td align="center" bgcolor="#C0C0C0"><input id="pos7t" type="checkbox" name="checkbox" class = "checkbox" onclick="cellClick(this, 4)"></td>
+<td align="center" bgcolor="#C0C0C0"><input id="pos8t" type="checkbox" name="checkbox" class = "checkbox" onclick="cellClick(this, 4)"></td>
+<td align="center" bgcolor="#C0C0C0"><input id="pos9t" type="checkbox" name="checkbox" class = "checkbox" onclick="cellClick(this, 4)"></td>
+</tr>
+</table>

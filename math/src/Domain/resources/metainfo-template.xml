@@ -1,0 +1,31 @@
+<metaInfoTask>
+	<sizeTable>
+		<rows></rows>
+		<cols></cols>
+	</sizeTable>
+	<conditionText>
+	</conditionText>
+	<arrayTrueAnswers>
+		<item></item>
+	</arrayTrueAnswers>
+	<itemsConditions>
+		<item></item>
+	</itemsConditions>
+	<itemsExplanations>
+		<item>
+			<condition></condition>
+			<explanation></explanation>
+			<trueAnswers>
+				<item></item>
+			</trueAnswers>
+			<variants>
+				<item></item>
+			</variants>
+		</item>
+	</itemsExplanations>
+	<extendingExplanations>
+	</extendingExplanations>
+	<labelsForDraw>
+		<item></item>
+	</labelsForDraw>
+</metaInfoTask>

@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{C2A2D2EE-1A8E-4081-A21A-41269541911D}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="src\Client\Client.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="src\Metodist\Metodist.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="Client">
+        <MSBuild Projects="src\Client\Client.dproj"/>
+    </Target>
+    <Target Name="Client:Clean">
+        <MSBuild Projects="src\Client\Client.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Client:Make">
+        <MSBuild Projects="src\Client\Client.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Metodist">
+        <MSBuild Projects="src\Metodist\Metodist.dproj"/>
+    </Target>
+    <Target Name="Metodist:Clean">
+        <MSBuild Projects="src\Metodist\Metodist.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Metodist:Make">
+        <MSBuild Projects="src\Metodist\Metodist.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="Client;Metodist"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="Client:Clean;Metodist:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="Client:Make;Metodist:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

@@ -1,0 +1,271 @@
+unit URavenClass;
+
+interface
+
+uses
+  WinApi.Windows, WinApi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.StdCtrls, Vcl.OleCtrls, Vcl.ComCtrls, Vcl.CheckLst,
+  Vcl.ExtCtrls, Vcl.Buttons,WinApi.ShellApi, Vcl.Menus, // MSHTML, jsWebBrowser,
+  UTimerForTrainer, UCourse, Generics.Collections, UModes, UStatistic,
+  UFormBase, UTools, UConfigClient, //UExtendReasoning,  UTaskMetaInfo,
+  UTaskInfo, UTypeTasks, WinApi.MMSystem, System.ImageList,
+  Vcl.ImgList, UCustomMessageBox, SHDocVw, UMainMenu, //UReasoning,
+  System.IOUtils, UTester,
+  UTaskResourcesManager, UDataModuleBase, Data.DB, Data.Win.ADODB;
+
+type
+    TRavenClass = class(TFormBase)
+    PanelWB: TPanel;
+    Label1: TLabel;
+    btnHelp: TBitBtn;
+    btnPauseTest: TBitBtn;
+    btnExit: TBitBtn;
+    Image11: TImage;
+    Image22: TImage;
+    Image33: TImage;
+    Image44: TImage;
+    Image55: TImage;
+    Image66: TImage;
+    Image77: TImage;
+    Image88: TImage;
+    questionImage1: TImage;
+    StatusBar11: TStatusBar;
+    StatusBarUserInfo: TStatusBar;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label2: TLabel;
+    RavenTimer1: TTimer;
+    resRaven1: TGroupBox;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Button1: TButton;
+    Button2: TButton;
+    procedure ImageClick(Sender: TObject);
+    procedure ImageLoad(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure btnExitClick(Sender: TObject);
+    procedure RavenTimer1Timer(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ResultsRaven(Sender: Tobject);
+    function HardLevel1(): Char;
+    procedure Button2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FRavenClass: TRavenClass;
+  IsFinishedTest1: Boolean;
+  RavenLvl1: Integer = 1;
+  Truth1, Falsee1, mm1, ss1, UId1, TAnswers1: Integer;
+  STime1 : Integer;
+  HardLevl1 : String;
+  HardLvl1 : Integer;
+  sch : Integer;
+
+implementation
+
+uses  UModeTestMenu, UDataModuleClient, UUserProfile;
+{$R *.dfm}
+
+
+function TRavenClass.HardLevel1() : Char;
+begin
+  case HardLvl1 of
+  0: Result:= 'A';
+  1: Result:= 'B';
+  2: Result:= 'C';
+  3: Result:= 'D';
+  4: Result:= 'E';
+  end;
+end;
+
+procedure TRavenClass.ResultsRaven(Sender: Tobject);
+var
+Effect, Time: Integer;
+begin
+  RavenTimer1.Enabled := false;
+  resRaven1.Visible:= True;
+  Label7.Caption := IntToStr(Truth1) + '/12';
+  label6.Caption := HardLevl1;
+  label9.Caption := StatusBar11.Panels[0].Text;
+  ss1:= 0;
+end;
+
+procedure TRavenClass.FormDestroy(Sender: TObject);
+var
+i: Integer;
+Image: TImage;
+begin
+  for i := 1 to 8 do
+    begin
+      Image := TImage(FindComponent('Image'+IntToStr(I)));
+      Image.Free;
+    end;
+  RavenTimer1.Enabled := False;
+  Truth1 := 0;
+  questionImage1.Free;
+  Self.Close;
+end;
+
+procedure TRavenClass.ImageClick(Sender: Tobject);
+var Answer, dir, ImageName, TrueAnswer: String;
+begin
+
+   dir:= '..\..\..\..\data\Pictures\'+ HardLevl1 + IntToStr(RavenLvl1) + '_0.bmp';
+    ImageName:= ExtractFileName(dir);
+  TrueAnswer := DataModuleBase.GetAnswerImage('"Pictures\'+ ImageName + '"');
+  Answer := 'Pictures\'+ (Sender as TImage).Hint + '.bmp';
+
+  if (Answer = TrueAnswer) then
+   Truth1:= Truth1 + 1
+  else
+  begin
+   Falsee1 := Falsee1 + 1;
+  end;
+  if (RavenLvl1 <> 12)  then
+  begin
+  RavenLvl1:= RavenLvl1 + 1;
+  Imageload(Self)
+  end
+  else
+  begin
+   ResultsRaven(Self);
+   //DataModuleClient.SaveStatisticRaven(UId {, HardLevl, STime, Truth});
+  end;
+
+end;
+
+procedure TRavenClass.RavenTimer1Timer(Sender: TObject);
+var seco1, minu1 : String;
+    mmm, sss : Extended;
+begin
+ //интервал времени в 1 секунду
+  Inc(ss1);
+  sss := ss1/2;
+    if(ss1 = 110)then
+    begin
+      Inc(mm1);
+      ss1:=0;
+    end;
+    seco1:=FloatToStr(sss);
+    minu1:=IntToStr(mm1);
+    if (ss1 < 20) then
+      seco1:='0'+seco1;
+    if (mm1 < 10) then
+      minu1:='0'+minu1;
+
+  StatusBar11.Panels[0].Text := minu1 + ':' + seco1;
+end;
+
+procedure TRavenClass.ImageLoad(Sender: TObject);
+var
+i: integer;
+Image: TImage;
+begin
+  HardLvl1:= random(5);
+  HardLevl1 := HardLevel1();
+
+   //Картинки
+
+   questionImage1.Picture.LoadFromFile('..\..\..\..\data\Pictures\' + HardLevl1 + IntToStr(RavenLvl1) + '_0.bmp');
+    if (HardLvl1=1) then
+    sch :=6 else
+    sch := 8;
+
+    for i := 1 to sch do
+    begin
+
+      Image := TImage(FindComponent('Image' + IntToStr(I) +IntToStr(I)));
+      Image.OnClick := ImageClick;
+      Image.Picture.LoadFromFile('..\..\..\..\data\Pictures\' + HardLevl1 + IntToStr(RavenLvl1) + '_' + IntToStr(I) + '.bmp');
+      Image.Hint := HardLevl1 + IntToStr(RavenLvl1) + '_' + IntToStr(I);
+
+      StatusBar11.Panels[3].Text:='Задание: ' + IntToStr(RavenLvl1) + '/12';
+
+    end;
+
+    StatusBar11.Panels[2].Text:= 'Сложность: '+  HardLevel1();
+//Выбор правильного варианта
+  //Answer := DataModuleBase.GetAnswerImage('"Pictures\"'+ ImageName);
+end;
+
+
+procedure TRavenClass.btnExitClick(Sender: TObject);
+var
+i: Integer;
+Image: TImage;
+begin
+  for i := 1 to sch do
+    begin
+      Image := TImage(FindComponent('Image'+IntToStr(I) + IntToStr(I)));
+      Image.Free;
+    end;
+  RavenTimer1.Enabled := False;
+  questionImage1.Free;
+  Truth1 := 0;
+  Self.Close;
+end;
+
+procedure TRavenClass.Button1Click(Sender: TObject);
+var
+i: Integer;
+Image: TImage;
+begin
+  for i := 1 to 8 do
+    begin
+      Image := TImage(FindComponent('Image'+IntToStr(I) + IntToStr(I)));
+      Image.Free;
+    end;
+  RavenTimer1.Enabled := False;
+  questionImage1.Free;
+  Self.Close;
+  FModeTestMenu:=TFModeTestMenu.Create(nil);
+  FModeTestMenu.Show;
+end;
+
+procedure TRavenClass.Button2Click(Sender: TObject);
+begin
+  RavenLvl1 := 1;
+  Truth1 := 0;
+  resRaven1.Visible := False;
+  ImageLoad(Self);
+  StatusBar11.Panels[0].Text := '0:00';
+  RavenTimer1.Enabled := True;
+end;
+
+procedure TRavenClass.FormCreate(Sender: TObject);
+var
+i, o: integer;
+begin
+   ImageLoad(Self);
+   //UId1 := FMainMenu.UserInfo.ID;
+   RavenTimer1.Interval:=1000;
+   RavenTimer1.Enabled := True;
+   mm1:=0;
+   ss1:=0;
+   Truth1 := 0;
+   StatusBar11.Panels[1].Text:= 'Тест Равена';
+   StatusBar11.Panels[2].Text:= 'Сложность: '+  HardLevel1();
+   StatusBar11.Panels[3].Text:='Задание: ' + IntToStr(RavenLvl1) + '/12';
+
+//  frmExtReasoning := TFExtendReasoning.Create(Self);
+//  frmExtReasoning.Parent := panelBackground;
+//  frmExtReasoning.Align := alClient;
+//  frmExtReasoning.Visible := false;
+//  frmExtReasoning.btnClose.OnClick := Self.OnCloseExtendReasoning;
+  //IsFinishedTest:=false;
+  //StatusBarUserInfo.Panels[0].Text:=FMainMenu.UserInfo.ToString();
+
+
+end;
+
+end.

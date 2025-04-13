@@ -1,0 +1,62 @@
+program Client;
+uses
+  Vcl.Forms,
+  UConfigBase in '..\Domain\tools\UConfigBase.pas',
+  UConfigClient in '..\Domain\tools\UConfigClient.pas',
+  UClassGroupInfo in '..\Domain\UClassGroupInfo.pas',
+  UTypeUser in '..\Domain\UTypeUser.pas',
+  UUserDTO in '..\Domain\UUserDTO.pas',
+  UUserInfo in '..\Domain\UUserInfo.pas',
+  UDataModuleClient in '..\DataModule\UDataModuleClient.pas' {DataModuleClient: TDataModule},
+  UNotifyEventWrapper in '..\SharedComponents\tools\UNotifyEventWrapper.pas',
+  UCustomMessageBox in '..\SharedComponents\UCustomMessageBox.pas' {FCustomMessageBox},
+  UFormBase in '..\SharedComponents\UFormBase.pas',
+  UMainMenu in 'UMainMenu.pas' {FMainMenu},
+  URegistration in 'URegistration.pas' {FRegistration},
+  UDataModuleBase in '..\DataModule\UDataModuleBase.pas' {DataModuleBase: TDataModule},
+  UTools in '..\Domain\tools\UTools.pas',
+  UUserProfile in 'UUserProfile.pas' {FUserProfile},
+  UDataModuleSQLiteBase in '..\DataModule\UDataModuleSQLiteBase.pas' {DataModuleSQLiteBase: TDataModule},
+  UCourse in '..\Domain\UCourse.pas',
+  ULessonInfo in '..\Domain\ULessonInfo.pas',
+  UStatistic in '..\Domain\UStatistic.pas',
+  UTaskInfo in '..\Domain\UTaskInfo.pas',
+  UTaskMetaInfo in '..\Domain\UTaskMetaInfo.pas',
+  UTaskResources in '..\Domain\UTaskResources.pas',
+  UTaskResourceType in '..\Domain\UTaskResourceType.pas',
+  UTypeTasks in '..\Domain\UTypeTasks.pas',
+  UModes in '..\Domain\UModes.pas',
+  UDataModuleEditor in '..\DataModule\UDataModuleEditor.pas' {DataModuleEditor: TDataModule},
+  UTaskResourcesManager in '..\SharedComponents\UTaskResourcesManager.pas',
+  UModeTestMenu in 'UModeTestMenu.pas' {FModeTestMenu},
+  UViewStatistic in 'UViewStatistic.pas' {FViewStatistic: TFrame},
+  UStatisticInfo in '..\Domain\UStatisticInfo.pas',
+  UTester in 'UTester.pas' {FTester},
+  UTimerForTrainer in 'UTimerForTrainer.pas',
+  UResults in 'UResults.pas' {FResults},
+  USolutionTask in 'USolutionTask.pas' {FSolutionTask},
+  UAbout in 'UAbout.pas' {FAbout},
+  ULTheory in 'ULTheory.pas' {FLTheory},
+  URavenTest in 'URavenTest.pas' {FRavenTest},
+  URavenClass in 'URavenClass.pas' {FRavenClass},
+  UShowStat in 'UShowStat.pas' {ShowStats};
+
+{$R *.res}
+begin
+  Application.Initialize;
+  Config := TAccessToFiles.Create();
+  AppTools := TTools.Create;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TDataModuleSQLiteBase, DataModuleSQLiteBase);
+  Application.CreateForm(TDataModuleBase, DataModuleBase);
+  Application.CreateForm(TDataModuleClient, DataModuleClient);
+  Application.CreateForm(TDataModuleEditor, DataModuleEditor);
+  Application.CreateForm(TFMainMenu, FMainMenu);
+  Application.CreateForm(TFCustomMessageBox, FCustomMessageBox);
+  Application.CreateForm(TFAbout, FAbout);
+  Application.CreateForm(TFLTheory, FLTheory);
+  Application.CreateForm(TFRavenTest, FRavenTest);
+  Application.CreateForm(TRavenClass, FRavenClass);
+  Application.CreateForm(TShowStats, ShowStats);
+  Application.Run;
+end.

@@ -1,0 +1,11 @@
+<table id="TableCondition" border=0 bgcolor="#ffffe6">
+<tr><td>ЗАГОЛОВОК</td></tr>
+<!--обычная строка--> <tr><td>В соревнованиях учавстовали: сурикат, кролик и зебра. За соревнованиями наблюдал мальчик. Когда его спросили кто какое место занял, он ответил, что </td></tr>
+<!--пункт условие пишется так--> <tr onMouseOver="this.bgColor = '#C0C0C0'"
+    onMouseOut ="this.bgColor = '#ffffe6'"><td style="cursor: pointer;" abbr="condition">1) зебра заняла то ли первое место, то ли второе;</td></tr>
+<!--пункт условие пишется так--> <tr onMouseOver="this.bgColor = '#C0C0C0'"
+    onMouseOut ="this.bgColor = '#ffffe6'"><td style="cursor: pointer;" abbr="condition">2) сурикат не уступал зебре и не был последним;</td></tr>
+<!--пункт условие пишется так--> <tr onMouseOver="this.bgColor = '#C0C0C0'"
+    onMouseOut ="this.bgColor = '#ffffe6'"><td style="cursor: pointer;" abbr="condition">3) кролик сначала догнал зебру и перегнал её, но испугался суриката, который был впереди, и отстал.</td></tr>
+<!--обычная строка--> <tr><td>Укажите кто какое место занял?</td></tr>
+</table></center>
